@@ -1,11 +1,11 @@
 ---
 controller_templates:
-  - name: "Demo Job Template"
+  - name: "test-template"
     description: ""
     organization: "Default"
-    project: "Demo Project"
+    project: "test-project"
     inventory: "Demo Inventory"
-    playbook: "hello_world.yml"
+    playbook: "concurrent.yml"
     scm_branch: ""
     forks: 0
     limit: ""
@@ -13,8 +13,6 @@ controller_templates:
     job_type: "run"
     job_slice_count: 1
     use_fact_cache: false
-    credentials:
-      - "Demo Credential"
     allow_simultaneous: false
     ask_scm_branch_on_launch: false
     ask_diff_mode_on_launch: false
@@ -39,17 +37,6 @@ controller_templates:
     timeout: 0
     host_config_key: ""
     survey_enabled: false
-    survey_spec:
-      name: ""
-      spec:
-        - max: 1024
-          min: 0
-          type: text
-          required: True
-          variable: var_test
-          new_question: True
-          question_name: 'Var Test'
-      description: ""
     become_enabled: false
     diff_mode: false
     webhook_service: ""

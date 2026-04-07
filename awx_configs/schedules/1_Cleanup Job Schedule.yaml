@@ -4,10 +4,10 @@ controller_schedules:
     description: "Automatically Generated Schedule"
     enabled: true
     unified_job_template: "Cleanup Job Details"
-    dtstart: "2026-04-05T21:12:42Z"
+    dtstart: "2026-04-12T21:43:19Z"
     dtend: ""
     timezone: "UTC"
-    rrule: "DTSTART:20260401T211242Z RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU"
+    rrule: "DTSTART:20260406T214319Z RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU"
     extra_data:
       days: '120'
     scm_branch: ""

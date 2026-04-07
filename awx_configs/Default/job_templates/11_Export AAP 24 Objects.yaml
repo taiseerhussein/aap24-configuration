@@ -1,11 +1,11 @@
 ---
 controller_templates:
-  - name: "Demo Job Template"
+  - name: "Export AAP 24 Objects"
     description: ""
     organization: "Default"
-    project: "Demo Project"
+    project: "aap24_export_factory"
     inventory: "Demo Inventory"
-    playbook: "hello_world.yml"
+    playbook: "playbooks/export24.yml"
     scm_branch: ""
     forks: 0
     limit: ""
@@ -14,7 +14,7 @@ controller_templates:
     job_slice_count: 1
     use_fact_cache: false
     credentials:
-      - "Demo Credential"
+      - "AAP Credential"
     allow_simultaneous: false
     ask_scm_branch_on_launch: false
     ask_diff_mode_on_launch: false
@@ -38,17 +38,18 @@ controller_templates:
     start_at_task: ""
     timeout: 0
     host_config_key: ""
-    survey_enabled: false
+    survey_enabled: true
     survey_spec:
       name: ""
       spec:
         - max: 1024
           min: 0
-          type: text
+          type: password
+          default: !unsafe "''"
           required: True
-          variable: var_test
-          new_question: True
-          question_name: 'Var Test'
+          variable: personal_access_token
+          new_question: False
+          question_name: personal_access_token
       description: ""
     become_enabled: false
     diff_mode: false

@@ -1,11 +1,11 @@
 ---
 controller_user_accounts:
-  - username: "admin"
+  - username: "demouser"
     password: "INITIAL"
-    email: "admin@example.com"
+    email: ""
     first_name: ""
     last_name: ""
     auditor: "False"
-    superuser: "True"
+    superuser: "False"
     update_secrets: false
 ...

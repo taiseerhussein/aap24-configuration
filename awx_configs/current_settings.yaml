@@ -14,13 +14,26 @@ controller_settings:
       CSRF_TRUSTED_ORIGINS:
         []
       LICENSE:
-        {}
+        sku: RH00798
+        usage: ''
+        satellite: null
+        valid_key: true
+        license_date: 1791604799
+        license_type: enterprise
+        product_name: Red Hat Ansible Automation Platform
+        support_level: ''
+        account_number: '5910538'
+        instance_count: 16
+        subscription_id: '19835778'
+        subscription_name: Red Hat Developer Subscription for Individuals
       REDHAT_USERNAME: ""
       REDHAT_PASSWORD: ""
-      SUBSCRIPTIONS_USERNAME: ""
+      SUBSCRIPTIONS_USERNAME: "thussein@redhat.com"
       SUBSCRIPTIONS_PASSWORD: ""
-      AUTOMATION_ANALYTICS_URL: "https://example.com"
-      INSTALL_UUID: "d4a335ee-190b-4d02-b7c3-7baec75862c0"
+      SUBSCRIPTIONS_CLIENT_ID: ""
+      SUBSCRIPTIONS_CLIENT_SECRET: ""
+      AUTOMATION_ANALYTICS_URL: "https://cloud.redhat.com/api/ingress/v1/upload"
+      INSTALL_UUID: "a51ab63f-cefa-4a97-9840-3ecf8425224e"
       DEFAULT_CONTROL_PLANE_QUEUE_NAME: "controlplane"
       DEFAULT_EXECUTION_QUEUE_NAME: "default"
       DEFAULT_EXECUTION_ENVIRONMENT: "null"
@@ -57,7 +70,7 @@ controller_settings:
       GALAXY_TASK_ENV:
         ANSIBLE_FORCE_COLOR: 'false'
         GIT_SSH_COMMAND: ssh -o StrictHostKeyChecking=no
-      INSIGHTS_TRACKING_STATE: "false"
+      INSIGHTS_TRACKING_STATE: "true"
       PROJECT_UPDATE_VVV: "false"
       AWX_ROLES_ENABLED: "true"
       AWX_COLLECTIONS_ENABLED: "true"
@@ -102,13 +115,12 @@ controller_settings:
       AUTOMATION_ANALYTICS_LAST_GATHER: "null"
       AUTOMATION_ANALYTICS_LAST_ENTRIES: ""
       AUTOMATION_ANALYTICS_GATHER_INTERVAL: "14400"
-      IS_K8S: "true"
+      IS_K8S: "false"
       BULK_JOB_MAX_LAUNCH: "100"
       BULK_HOST_MAX_CREATE: "100"
-      BULK_HOST_MAX_DELETE: "250"
       UI_NEXT: "true"
-      SUBSCRIPTION_USAGE_MODEL: ""
-      CLEANUP_HOST_METRICS_LAST_TS: "null"
+      SUBSCRIPTION_USAGE_MODEL: "unique_managed_hosts"
+      CLEANUP_HOST_METRICS_LAST_TS: "2026-04-07T01:19:25.679923Z"
       HOST_METRIC_SUMMARY_TASK_LAST_TS: "null"
       AWX_CLEANUP_PATHS: "true"
       AWX_REQUEST_PROFILE: "false"
@@ -116,6 +128,7 @@ controller_settings:
         - --network
         - slirp4netns:enable_ipv6=true
       RECEPTOR_RELEASE_WORK: "true"
+      RECEPTOR_KEEP_WORK_ON_ERROR: "false"
       SESSION_COOKIE_AGE: "1800"
       SESSIONS_PER_USER: "-1"
       DISABLE_LOCAL_AUTH: "false"
@@ -127,7 +140,7 @@ controller_settings:
       ALLOW_OAUTH2_FOR_EXTERNAL_USERS: "false"
       LOGIN_REDIRECT_OVERRIDE: ""
       ALLOW_METRICS_FOR_ANONYMOUS_USERS: "false"
-      PENDO_TRACKING_STATE: "off"
+      PENDO_TRACKING_STATE: "detailed"
       CUSTOM_LOGIN_INFO: ""
       CUSTOM_LOGO: ""
       MAX_UI_JOB_EVENTS: "4000"
