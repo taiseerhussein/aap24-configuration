@@ -1,0 +1,7 @@
+---
+controller_roles:
+  - user: "demouser"
+    organizations:
+      - "Default"
+    role: "member"
+...
