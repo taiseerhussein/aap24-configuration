@@ -4,9 +4,10 @@ controller_instance_groups:
     policy_instance_minimum: "0"
     policy_instance_percentage: "100"
     instances:
-      - "dev0-task-647b4fc7b9-kx8sx"
+      - "192.168.64.10"
   - name: "default"
     policy_instance_minimum: "0"
     policy_instance_percentage: "100"
     instances:
+      - "192.168.64.10"
 ...
