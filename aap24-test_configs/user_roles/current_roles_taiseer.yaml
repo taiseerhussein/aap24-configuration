@@ -1,0 +1,7 @@
+---
+controller_roles:
+  - user: "taiseer"
+    organizations:
+      - "dev"
+    role: "member"
+...
