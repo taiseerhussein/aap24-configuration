@@ -1,3 +1,9 @@
 ---
-organizations: []
+aap_organizations:
+  - name: Default
+    description: ''
+  - name: dev
+    description: ''
+  - name: prod
+    description: ''
 ...
