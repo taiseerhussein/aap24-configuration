@@ -29,9 +29,9 @@
         aap24_configs_dir: "{{ local_repo }}/aap24_configs"
         aap25_configs_dir: "{{ local_repo }}/aap25_configs"
         input_authenticator_enabled: false
+        input_authenticator_name: "IDM LDAP"
       ansible.builtin.include_role:
         name: infra.aap_configuration_extended.upgrade_config
-        input_authenticator_name: "IDM LDAP"
 
     - name: Add any new playbooks to the software_repository
       changed_when: false
