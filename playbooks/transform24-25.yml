@@ -26,8 +26,8 @@
     - name: Call upgrade_config role
       vars:
         # input_authenticator_name: "IDM LDAP"
-        aap24_configs_dir: "{{ local_repo }}/aap24_configs"
-        aap25_configs_dir: "{{ local_repo }}/aap25_configs"
+        aap24_configs_dir: "{{ local_repo }}/{{ aap24_configs }}"
+        aap25_configs_dir: "{{ local_repo }}/{{ aap25_configs }}"
         saml_authenticator_enabled: false
       ansible.builtin.include_role:
         name: infra.aap_configuration_extended.upgrade_config
