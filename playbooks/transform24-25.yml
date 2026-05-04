@@ -32,6 +32,7 @@
         input_authenticator_name: "IDM LDAP"
       ansible.builtin.include_role:
         name: infra.aap_configuration_extended.upgrade_config
+      when: controller_settings[0].settings.SOCIAL_AUTH_SAML_ORG_INFO is defined  
 
     - name: Add any new playbooks to the software_repository
       changed_when: false
