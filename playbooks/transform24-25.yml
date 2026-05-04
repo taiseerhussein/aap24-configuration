@@ -31,6 +31,7 @@
         input_authenticator_enabled: false
       ansible.builtin.include_role:
         name: infra.aap_configuration_extended.upgrade_config
+        input_authenticator_name: "IDM LDAP"
 
     - name: Add any new playbooks to the software_repository
       changed_when: false
