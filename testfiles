@@ -1,0 +1,21 @@
+cd /path/to/aap24/export
+
+for f in \
+  organizations.yaml \
+  users.yaml \
+  teams.yaml \
+  inventories.yaml \
+  hosts.yaml \
+  groups.yaml \
+  projects.yaml \
+  templates.yaml \
+  workflows.yaml \
+  credentials.yaml \
+  credential_types.yaml \
+  inventory_sources.yaml \
+  notifications.yaml \
+  schedules.yaml \
+  settings.yaml
+do
+  [ -f "$f" ] || printf -- "---\n%s: []\n" "${f%.yaml}" > "$f"
+done
