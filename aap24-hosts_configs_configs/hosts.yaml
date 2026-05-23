@@ -1,0 +1,22 @@
+---
+controller_hosts:
+  - name: "host2"
+    description: ""
+    inventory: "Demo Inventory"
+  - name: "localhost"
+    description: ""
+    inventory: "Demo Inventory"
+    variables:
+      ansible_connection: local
+      ansible_python_interpreter: !unsafe '{{ ansible_playbook_python }}'
+---
+controller_hosts:
+  - name: "10.10.10.1"
+    description: "ip host"
+    inventory: "upgrade"
+  - name: "host3"
+    description: "my third host"
+    inventory: "upgrade"
+    variables:
+      var1: test
+...
