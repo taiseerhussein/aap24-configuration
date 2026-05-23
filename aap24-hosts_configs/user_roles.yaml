@@ -60,3 +60,23 @@ controller_roles:
       - "org1-admins"
     role: "member"
 ...
+  - user: "taiseer"
+    organizations:
+      - "dev"
+    role: "member"
+  - user: "testuser"
+    target_teams:
+      - "saml-test-users"
+    role: "member"
+  - user: "user2"
+    target_teams:
+      - "saml-test-users"
+      - "org1-admins"
+    role: "member"
+  - user: "produser"
+    target_teams:
+      - "saml-test-users"
+      - "prod-admins"
+      - "org1-admins"
+    role: "member"
+...
