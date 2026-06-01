@@ -1,0 +1,106 @@
+---
+- name: "Playbook to upgrade CaC from AAP <= 2.4 to AAP >= 2.5 format"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    personal_access_token: "{{ git_hub_token }}"
+    software_repository: https://{{ personal_access_token }}@github.com/taiseerhussein/aap24-configuration.git
+    local_repo: /var/tmp/github/aap24_conversion
+    git_name: taiseerhussein
+    git_email: tkhussein@yahoo.com
+
+  tasks:
+
+    - name: Determine that both AAP and Machine credentials are set
+      ansible.builtin.assert:
+        that:
+          - "lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') !=''"
+          - "lookup('ansible.builtin.env', 'CONTROLLER_HOST') !=''"
+          - "lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') !=''"
+        fail_msg:
+          - "Red Hat Ansible Automation Platform credential is not set"
+          - "Please assign correct credentials to the Job Template"
+
+    - name: Create a new token
+      ansible.controller.token:
+        controller_host: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+        controller_username: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+        controller_password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+        validate_certs: false
+        description: Controller export
+        scope: write
+        state: present
+
+    - name: Printout my token
+      ansible.builtin.debug:
+        msg:
+          - "{{ ansible_facts['controller_token']['token'] }}"
+
+    - name: "Set the oauth token to be used since now"
+      ansible.builtin.set_fact:
+        controller_oauthtoken: "{{ ansible_facts['controller_token']['token'] }}"
+
+    - name: Set controller_validate_certs
+      ansible.builtin.set_fact:
+        controller_validate_certs: false
+
+    - name: Set controller_hostname
+      ansible.builtin.set_fact:
+        controller_hostname: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+
+    - name: Clone the software repository
+      register: clone_result
+      run_once: true
+      when: software_repository is defined
+      ansible.builtin.git:
+        repo: "{{ software_repository }}"
+        dest: "{{ local_repo }}"
+        accept_hostkey: true
+        force: true
+        version: main
+
+    - name: Read the cloned file tree into Ansible variables
+      ansible.builtin.include_role:
+        name: infra.controller_configuration.filetree_read
+      vars:
+        filetree_controller_patch: "{{ local_repo }}"
+
+    - name: Dispatch the configurations into AAP 2.6
+      ansible.builtin.include_role:
+        name: infra.controller_configuration.dispatch
+
+    # - name: Add any new playbooks to the software_repository
+    #   changed_when: false
+    #   run_once: true
+    #   args:
+    #     chdir: "{{ local_repo }}"
+    #   ansible.builtin.shell: git add *
+
+    # - name: Get the status of the repository
+    #   register: status_results
+    #   changed_when: false
+    #   ignore_errors: true
+    #   run_once: true
+    #   args:
+    #     chdir: "{{ local_repo }}"
+    #   ansible.builtin.shell: git status
+
+    # - name: Commit the changes
+    #   when: status_results.stdout is search('Changes')
+    #   run_once: true
+    #   environment:
+    #     GIT_COMMITTER_NAME: "{{ git_name | default(omit) }}"
+    #     GIT_COMMITTER_EMAIL: "{{ git_email | default(omit) }}"
+    #     GIT_AUTHOR_NAME: "{{ git_name | default(omit) }}"
+    #     GIT_AUTHOR_EMAIL: "{{ git_email | default(omit) }}"
+    #   args:
+    #     chdir: "{{ local_repo }}"
+    #   ansible.builtin.shell: git commit -am 'New AAP 2.5 code'
+
+    # - name: Push the changes
+    #   run_once: true
+    #   when: software_repository is defined
+    #   args:
+    #     chdir: "{{ local_repo }}"
+    #   ansible.builtin.shell: git push
