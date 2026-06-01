@@ -70,13 +70,22 @@
     #   vars:
     #     filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
 
-    - name: Read the cloned file tree into Ansible variables
-      ansible.builtin.include_role:
-        name: infra.controller_configuration.filetree_read
-      vars:
-        filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
-        # This tells the role to use organization-mode parsing loops
-        flatten: true
+    - name: Map flat files to dispatch variables
+      ansible.builtin.set_fact:
+        controller_organizations: "{{ lookup('ansible.builtin.file', local_repo + '/organizations.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_credential_types: "{{ lookup('ansible.builtin.file', local_repo + '/credential_types.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_credentials: "{{ lookup('ansible.builtin.file', local_repo + '/credentials.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_execution_environments: "{{ lookup('ansible.builtin.file', local_repo + '/execution_environments.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_instance_groups: "{{ lookup('ansible.builtin.file', local_repo + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_projects: "{{ lookup('ansible.builtin.file', local_repo + '/projects.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_inventories: "{{ lookup('ansible.builtin.file', local_repo + '/inventories.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_hosts: "{{ lookup('ansible.builtin.file', local_repo + '/hosts.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_teams: "{{ lookup('ansible.builtin.file', local_repo + '/teams.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_users: "{{ lookup('ansible.builtin.file', local_repo + '/users.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_roles: "{{ lookup('ansible.builtin.file', local_repo + '/roles.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_templates: "{{ lookup('ansible.builtin.file', local_repo + '/job_templates.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_schedules: "{{ lookup('ansible.builtin.file', local_repo + '/schedules.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        controller_settings: "{{ lookup('ansible.builtin.file', local_repo + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
         
 
     
