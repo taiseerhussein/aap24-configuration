@@ -76,7 +76,7 @@
         controller_credential_types: "{{ lookup('ansible.builtin.file', input_path + '/credential_types.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_credentials: "{{ lookup('ansible.builtin.file', input_path + '/credentials.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_execution_environments: "{{ lookup('ansible.builtin.file', input_path + '/execution_environments.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_instance_groups: "{{ lookup('ansible.builtin.file', input_path + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        # controller_instance_groups: "{{ lookup('ansible.builtin.file', input_path + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_projects: "{{ lookup('ansible.builtin.file', input_path + '/projects.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_inventories: "{{ lookup('ansible.builtin.file', input_path + '/inventories.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_hosts: "{{ lookup('ansible.builtin.file', input_path + '/hosts.yaml', errors='ignore') | default([], true) | from_yaml }}"
