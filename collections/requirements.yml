@@ -16,3 +16,5 @@ collections:
     version: 4.2.0
   - name: infra.aap_configuration_extended
     version: 4.5.0
+  - name: infra.controller_configuration
+    version: 3.4.0
