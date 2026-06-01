@@ -85,6 +85,14 @@
         dir_job_templates_vars: "job_templates"
         dir_workflow_job_templates_vars: "workflow_job_templates"
 
+    - name: Show what filetree_read loaded
+      ansible.builtin.debug:
+        msg:
+          controller_organizations: "{{ controller_organizations | default('NOT LOADED') }}"
+          controller_credentials: "{{ controller_credentials | default('NOT LOADED') }}"
+          controller_projects: "{{ controller_projects | default('NOT LOADED') }}"
+          controller_inventories: "{{ controller_inventories | default('NOT LOADED') }}"
+          controller_templates: "{{ controller_templates | default('NOT LOADED') }}"
     - name: Dispatch the configurations into AAP 2.6
       ansible.builtin.include_role:
         name: infra.controller_configuration.dispatch
