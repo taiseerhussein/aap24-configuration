@@ -1,0 +1,11 @@
+---
+controller_roles:
+  - team: "saml-test-users"
+    job_templates:
+      - "upgrade"
+    role: "execute"
+  - team: "saml-test-users"
+    inventories:
+      - "upgrade"
+    role: "use"
+...
