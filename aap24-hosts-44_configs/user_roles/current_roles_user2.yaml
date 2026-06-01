@@ -1,0 +1,7 @@
+---
+controller_roles:
+  - user: "user2"
+    target_teams:
+      - "saml-test-users"
+      - "org1-admins"
+    role: "member"
