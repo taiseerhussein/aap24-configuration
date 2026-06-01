@@ -85,7 +85,7 @@
         controller_roles: "{{ lookup('ansible.builtin.file', input_path + '/roles.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_templates: "{{ lookup('ansible.builtin.file', input_path + '/job_templates.yaml', errors='ignore') | default([], true) | from_yaml }}"
         controller_schedules: "{{ lookup('ansible.builtin.file', input_path + '/schedules.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_settings: "{{ lookup('ansible.builtin.file', input_path + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
+       # controller_settings: "{{ lookup('ansible.builtin.file', input_path + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
         
 
     
