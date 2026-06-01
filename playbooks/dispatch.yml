@@ -78,9 +78,9 @@
       ansible.builtin.include_role:
         name: infra.controller_configuration.filetree_read
       vars:
-        filetree_controller_patch: "{{ input_path }}"
+        filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
         # This tells the role to use organization-mode parsing loops
-        filetree_read_organizations: "{{ controller_organizations }}"
+        flatten: true
 
     
     - name: Dispatch the configurations into AAP 2.6
