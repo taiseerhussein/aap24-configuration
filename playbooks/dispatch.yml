@@ -70,25 +70,31 @@
     #   vars:
     #     filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
 
-    - name: Map flat files to dispatch variables
-      ansible.builtin.set_fact:
-        controller_organizations: "{{ lookup('ansible.builtin.file', input_path + '/organizations.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_credential_types: "{{ lookup('ansible.builtin.file', input_path + '/credential_types.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_credentials: "{{ lookup('ansible.builtin.file', input_path + '/credentials.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_execution_environments: "{{ lookup('ansible.builtin.file', input_path + '/execution_environments.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        # controller_instance_groups: "{{ lookup('ansible.builtin.file', input_path + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_projects: "{{ lookup('ansible.builtin.file', input_path + '/projects.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_inventories: "{{ lookup('ansible.builtin.file', input_path + '/inventories.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_hosts: "{{ lookup('ansible.builtin.file', input_path + '/hosts.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_teams: "{{ lookup('ansible.builtin.file', input_path + '/teams.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_users: "{{ lookup('ansible.builtin.file', input_path + '/users.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_roles: "{{ lookup('ansible.builtin.file', input_path + '/roles.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_templates: "{{ lookup('ansible.builtin.file', input_path + '/job_templates.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        controller_schedules: "{{ lookup('ansible.builtin.file', input_path + '/schedules.yaml', errors='ignore') | default([], true) | from_yaml }}"
-       # controller_settings: "{{ lookup('ansible.builtin.file', input_path + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    # - name: Map flat files to dispatch variables
+    #   ansible.builtin.set_fact:
+    #     controller_organizations: "{{ lookup('ansible.builtin.file', input_path + '/organizations.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_credential_types: "{{ lookup('ansible.builtin.file', input_path + '/credential_types.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_credentials: "{{ lookup('ansible.builtin.file', input_path + '/credentials.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_execution_environments: "{{ lookup('ansible.builtin.file', input_path + '/execution_environments.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     # controller_instance_groups: "{{ lookup('ansible.builtin.file', input_path + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_projects: "{{ lookup('ansible.builtin.file', input_path + '/projects.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_inventories: "{{ lookup('ansible.builtin.file', input_path + '/inventories.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_hosts: "{{ lookup('ansible.builtin.file', input_path + '/hosts.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_teams: "{{ lookup('ansible.builtin.file', input_path + '/teams.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_users: "{{ lookup('ansible.builtin.file', input_path + '/users.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_roles: "{{ lookup('ansible.builtin.file', input_path + '/roles.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_templates: "{{ lookup('ansible.builtin.file', input_path + '/job_templates.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_schedules: "{{ lookup('ansible.builtin.file', input_path + '/schedules.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #    # controller_settings: "{{ lookup('ansible.builtin.file', input_path + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
         
 
-    
+    - name: Map job templates to the naming convention expected by dispatch
+      ansible.builtin.set_fact:
+        controller_templates: "{{ controller_job_templates | default([], true) }}"
+        # Set infrastructure variables to safe empty lists so dispatch skips them cleanly
+        controller_instance_groups: []
+        controller_settings: []
+        
     - name: Dispatch the configurations into AAP 2.6
       ansible.builtin.include_role:
         name: infra.controller_configuration.dispatch
