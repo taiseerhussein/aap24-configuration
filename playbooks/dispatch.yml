@@ -81,6 +81,8 @@
         filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
         # This tells the role to use organization-mode parsing loops
         flatten: true
+        orgs: "all"
+        dir_orgs_vars: "{{ filetree_controller_settings }}"
 
     
     - name: Dispatch the configurations into AAP 2.6
