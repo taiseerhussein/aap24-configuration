@@ -131,7 +131,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "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"
+          default: ""
           required: True
           variable: personal_access_token
           new_question: False
@@ -139,7 +139,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "aap24-hosts"
+          default: "aap24-hosts"
           required: True
           variable: config_dir
           new_question: False
@@ -194,7 +194,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "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"
+          default: ""
           required: True
           variable: personal_access_token
           new_question: False
@@ -202,7 +202,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "aap24-hosts_configs"
+          default: "aap24-hosts_configs"
           required: True
           variable: aap24_configs
           new_question: False
@@ -210,7 +210,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "aap25-hosts"
+          default: "aap25-hosts"
           required: True
           variable: aap25_configs
           new_question: False
