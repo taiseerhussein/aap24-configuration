@@ -66,9 +66,24 @@
     #   vars:
     #     filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
 
-    - name: Load single YAML config file
-      ansible.builtin.include_vars:
-        file: "{{ local_repo }}/{{ aap24_configs }}"
+    - name: Read the cloned file tree into Ansible variables
+      ansible.builtin.include_role:
+        name: infra.controller_configuration.filetree_read
+      vars:
+        orgs: "all"
+        filetree_controller_settings: "{{ local_repo }}/{{ aap24_configs }}"
+
+        dir_orgs_vars: "{{ filetree_controller_settings }}"
+        dir_common_vars: "{{ filetree_controller_settings }}/ORGANIZATIONLESS"
+
+        dir_teams_vars: "teams"
+        dir_users_vars: "users"
+        dir_credentials_vars: "credentials"
+        dir_projects_vars: "projects"
+        dir_inventories_vars: "inventories"
+        dir_inventory_sources_vars: "inventory_sources"
+        dir_job_templates_vars: "job_templates"
+        dir_workflow_job_templates_vars: "workflow_job_templates"
 
     - name: Dispatch the configurations into AAP 2.6
       ansible.builtin.include_role:
