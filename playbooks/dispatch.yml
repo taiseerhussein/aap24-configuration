@@ -75,24 +75,41 @@
           - yaml
         ignore_unknown_extensions: true
 
-    - name: Show loaded variable counts
-      ansible.builtin.debug:
-        msg:
-          organizations: "{{ controller_organizations | default([]) | length }}"
-          users: "{{ controller_users | default([]) | length }}"
-          teams: "{{ controller_teams | default([]) | length }}"
-          credentials: "{{ controller_credentials | default([]) | length }}"
-          projects: "{{ controller_projects | default([]) | length }}"
-          inventories: "{{ controller_inventories | default([]) | length }}"
-          job_templates: "{{ controller_templates | default(controller_job_templates | default([])) | length }}"
-    - name: Show credentials before import
-      ansible.builtin.debug:
-        msg:
-          name: "{{ item.name }}"
-          org: "{{ item.organization | default('NO ORG') }}"
-          type: "{{ item.credential_type | default('NO TYPE') }}"
-          input_keys: "{{ item.inputs.keys() | list if item.inputs is defined else [] }}"
-      loop: "{{ controller_credentials | default([]) }}"  
+    - name: Remove system/default execution environments
+      ansible.builtin.set_fact:
+        controller_execution_environments: >-
+          {{
+            controller_execution_environments | default([])
+            | rejectattr('name', 'in', [
+                'Hub Default execution environment',
+                'Hub Minimal execution environment'
+                'Default execution environment',
+                'Minimal execution environment',
+                'Control Plane Execution Environment',
+                'Ansible Engine 2.9 execution environment',
+                'Automation Hub Default execution environment'
+              ])
+            | list
+          }}    
+
+    # - name: Show loaded variable counts
+    #   ansible.builtin.debug:
+    #     msg:
+    #       organizations: "{{ controller_organizations | default([]) | length }}"
+    #       users: "{{ controller_users | default([]) | length }}"
+    #       teams: "{{ controller_teams | default([]) | length }}"
+    #       credentials: "{{ controller_credentials | default([]) | length }}"
+    #       projects: "{{ controller_projects | default([]) | length }}"
+    #       inventories: "{{ controller_inventories | default([]) | length }}"
+    #       job_templates: "{{ controller_templates | default(controller_job_templates | default([])) | length }}"
+    # - name: Show credentials before import
+    #   ansible.builtin.debug:
+    #     msg:
+    #       name: "{{ item.name }}"
+    #       org: "{{ item.organization | default('NO ORG') }}"
+    #       type: "{{ item.credential_type | default('NO TYPE') }}"
+    #       input_keys: "{{ item.inputs.keys() | list if item.inputs is defined else [] }}"
+    #   loop: "{{ controller_credentials | default([]) }}"  
   roles:
     - ../../roles/manage-aap-config
 
