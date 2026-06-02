@@ -114,32 +114,9 @@
             | map('items2dict')
             | list
           }}
-    # - name: Show loaded variable counts
-    #   ansible.builtin.debug:
-    #     msg:
-    #       organizations: "{{ controller_organizations | default([]) | length }}"
-    #       users: "{{ controller_users | default([]) | length }}"
-    #       teams: "{{ controller_teams | default([]) | length }}"
-    #       credentials: "{{ controller_credentials | default([]) | length }}"
-    #       projects: "{{ controller_projects | default([]) | length }}"
-    #       inventories: "{{ controller_inventories | default([]) | length }}"
-    #       job_templates: "{{ controller_templates | default(controller_job_templates | default([])) | length }}"
-    # - name: Show credentials before import
-    #   ansible.builtin.debug:
-    #     msg:
-    #       name: "{{ item.name }}"
-    #       org: "{{ item.organization | default('NO ORG') }}"
-    #       type: "{{ item.credential_type | default('NO TYPE') }}"
-    #       input_keys: "{{ item.inputs.keys() | list if item.inputs is defined else [] }}"
-    #   loop: "{{ controller_credentials | default([]) }}"  
+     
   roles:
     - ../../roles/manage-aap-config
-
-    # - role: infra.controller_configuration.credential_types
-    #   when: controller_credential_types is defined
-
-    # - role: infra.controller_configuration.credentials
-    #   when: controller_credentials is defined
 
     - role: infra.controller_configuration.execution_environments
       when: controller_execution_environments is defined
