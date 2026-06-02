@@ -66,7 +66,7 @@
 
     - name: Load normalized variable files
       ansible.builtin.include_vars:
-        dir: "{{ aap24_configs }}"
+        dir: "{{ input_path }}"
         extensions:
           - yml
           - yaml
