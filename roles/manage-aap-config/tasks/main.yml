@@ -22,16 +22,16 @@
     # state: "{{ item.state }}"
   loop: "{{ controller_teams }}"
 
-- name: Create empty credentials
-  ansible.controller.credential:
-    name: "{{ item.name }}"
-    description: "{{ item.description }}"
-    organization: "{{ item.organization }}"
-    credential_type: "{{ item.credential_type }}"
-    inputs: "{{ item.inputs }}"
-    validate_certs: "{{ gateway_validate_certs }}"
-    # state: "{{ item.state }}"
-  loop: "{{ controller_credentials }}"
+# - name: Create empty credentials
+#   ansible.controller.credential:
+#     name: "{{ item.name }}"
+#     description: "{{ item.description }}"
+#     organization: "{{ item.organization }}"
+#     credential_type: "{{ item.credential_type }}"
+#     inputs: "{{ item.inputs }}"
+#     validate_certs: "{{ gateway_validate_certs }}"
+#     # state: "{{ item.state }}"
+#   loop: "{{ controller_credentials }}"
 
 # - name: Create Projects
 #   ansible.controller.project:
