@@ -15,4 +15,9 @@ controller_execution_environments:
     image: "registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8:latest"
     pull: ""
     credential: "Default Execution Environment Registry Credential"
+  - name: "upgrade-demo-ee"
+    description: ""
+    image: "registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8:latest"
+    pull: ""
+    credential: "Default Execution Environment Registry Credential"
 ...
