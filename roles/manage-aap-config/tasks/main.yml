@@ -37,23 +37,4 @@
     gateway_password: "{{ gateway_password }}"
     gateway_validate_certs: "{{ gateway_validate_certs }}"
   loop: "{{ controller_user_accounts }}"
-    # state: present
-# - name: Add users to organizations
-#   ansible.platform.role_user_assignment:
-#     gateway_hostname: "{{ gateway_hostname }}"
-#     gateway_username: "{{ gateway_username }}"
-#     gateway_password: "{{ gateway_password }}"
-#     gateway_validate_certs: "{{ gateway_validate_certs }}"
-#     user: "{{ item.user }}"
-#     role_definition: "{{ item.role }}"
-#     object_name: "{{ item.user }}"
-#   loop: "{{ controller_roles | subelements('organizations', skip_missing=True) }}"
-  
-
-
-# - name: Template
-#   ansible.platform.test
-#   gateway_hostname: "{{ gateway_hostname }}"
-#   gateway_username: "{{ gateway_username }}"
-#   gateway_password: "{{ gateway_password }}"
-#   gateway_validate_certs: "{{ gateway_validate_certs }}"    
+    
