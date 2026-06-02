@@ -36,6 +36,7 @@
     gateway_username: "{{ gateway_username }}"
     gateway_password: "{{ gateway_password }}"
     gateway_validate_certs: "{{ gateway_validate_certs }}"
+  loop: "{{ controller_user_accounts }}"
     # state: present
 # - name: Add users to organizations
 #   ansible.platform.role_user_assignment:
