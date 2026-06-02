@@ -91,7 +91,18 @@
               ])
             | list
           }}    
-
+    - name: Remove system/default instance groups 
+      ansible.builtin.set_fact:
+        controller_execution_environments: >-
+          {{
+            controller_instance_groups | default([])
+            | rejectattr('name', 'in', [
+                'controlplane',
+                'default'
+                'executionplane'
+              ])
+            | list
+          }}  
     # - name: Show loaded variable counts
     #   ansible.builtin.debug:
     #     msg:
