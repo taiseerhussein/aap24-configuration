@@ -1,6 +1,0 @@
----
-controller_teams:
-  - name: "org1-admins"
-    description: ""
-    organization: "Org1"
-...

@@ -1,9 +1,0 @@
----
-controller_roles:
-  - user: "produser"
-    target_teams:
-      - "saml-test-users"
-      - "prod-admins"
-      - "org1-admins"
-    role: "member"
-...

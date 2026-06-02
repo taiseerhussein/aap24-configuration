@@ -1,6 +1,0 @@
----
-controller_teams:
-  - name: "prod-admins"
-    description: ""
-    organization: "prod"
-...
