@@ -21,7 +21,15 @@
     gateway_validate_certs: "{{ gateway_validate_certs }}"
     # state: "{{ item.state }}"
   loop: "{{ controller_teams }}"
-
+- name: Create one source control credential
+  ansible.controller.credential:
+    name: "demotestgithub"
+    credential_type: "Source Control"
+    organization: "Default"
+    inputs:
+      username: "taiseerhussein"
+      password: "CHANGE_ME"
+    state: present
 # - name: Create empty credentials
 #   ansible.controller.credential:
 #     name: "{{ item.name }}"
