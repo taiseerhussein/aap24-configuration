@@ -13,8 +13,11 @@
     flatten: true
     filetree_read_organizations: false
     input_path: "{{ local_repo }}/{{ aap24_configs }}"
+    gateway_validate_certs: false
+  vars_files:
+    - ../var_files/platform-info.yml
 
-  tasks:
+  pre_tasks:
 
     - name: Determine that both AAP and Machine credentials are set
       ansible.builtin.assert:
@@ -82,87 +85,39 @@
           projects: "{{ controller_projects | default([]) | length }}"
           inventories: "{{ controller_inventories | default([]) | length }}"
           job_templates: "{{ controller_templates | default(controller_job_templates | default([])) | length }}"
-    - name: Create gateway organizations
-      ansible.platform.organization:
-        name: "{{ item.name }}"
-        description: "{{ item.description | default(omit) }}"
-        state: present
-        aap_hostname: "{{ aap_hostname }}"
-        aap_username: "{{ aap_username }}"
-        aap_password: "{{ aap_password }}"
-        aap_validate_certs: "{{ aap_validate_certs }}"
-      loop: "{{ gateway_organizations | default([]) }}"
-
-    - name: Create gateway users
-      ansible.platform.user:
-        username: "{{ item.username }}"
-        first_name: "{{ item.first_name | default(omit) }}"
-        last_name: "{{ item.last_name | default(omit) }}"
-        email: "{{ item.email | default(omit) }}"
-        is_superuser: "{{ item.is_superuser | default(false) }}"
-        password: "{{ item.password | default(omit) }}"
-        state: present
-        aap_hostname: "{{ aap_hostname }}"
-        aap_username: "{{ aap_username }}"
-        aap_password: "{{ aap_password }}"
-        aap_validate_certs: "{{ aap_validate_certs }}"
-      loop: "{{ gateway_users | default([]) }}"
-
-    - name: Create gateway teams
-      ansible.platform.team:
-        name: "{{ item.name }}"
-        organization: "{{ item.organization }}"
-        description: "{{ item.description | default(omit) }}"
-        state: present
-        aap_hostname: "{{ aap_hostname }}"
-        aap_username: "{{ aap_username }}"
-        aap_password: "{{ aap_password }}"
-        aap_validate_certs: "{{ aap_validate_certs }}"
-      loop: "{{ gateway_teams | default([]) }}"
-
-    - name: Apply gateway role assignments
-      ansible.platform.role_user_assignment:
-        user: "{{ item.user }}"
-        role_definition: "{{ item.role_definition }}"
-        object_id: "{{ item.object_id | default(omit) }}"
-        content_type: "{{ item.content_type | default(omit) }}"
-        state: present
-        aap_hostname: "{{ aap_hostname }}"
-        aap_username: "{{ aap_username }}"
-        aap_password: "{{ aap_password }}"
-        aap_validate_certs: "{{ aap_validate_certs }}"
-      loop: "{{ gateway_role_assignments | default([]) }}"
-
   roles:
-    - role: infra.controller_configuration.credential_types
-      when: controller_credential_types is defined
+    - ../../roles/manage-aap-config
 
-    - role: infra.controller_configuration.credentials
-      when: controller_credentials is defined
+  # roles:
+  #   - role: infra.controller_configuration.credential_types
+  #     when: controller_credential_types is defined
 
-    - role: infra.controller_configuration.projects
-      when: controller_projects is defined
+  #   - role: infra.controller_configuration.credentials
+  #     when: controller_credentials is defined
 
-    - role: infra.controller_configuration.inventories
-      when: controller_inventories is defined
+  #   - role: infra.controller_configuration.projects
+  #     when: controller_projects is defined
 
-    - role: infra.controller_configuration.inventory_sources
-      when: controller_inventory_sources is defined
+  #   - role: infra.controller_configuration.inventories
+  #     when: controller_inventories is defined
 
-    - role: infra.controller_configuration.hosts
-      when: controller_hosts is defined
+  #   - role: infra.controller_configuration.inventory_sources
+  #     when: controller_inventory_sources is defined
 
-    - role: infra.controller_configuration.groups
-      when: controller_groups is defined
+  #   - role: infra.controller_configuration.hosts
+  #     when: controller_hosts is defined
 
-    - role: infra.controller_configuration.job_templates
-      when: controller_templates is defined or controller_job_templates is defined
+  #   - role: infra.controller_configuration.groups
+  #     when: controller_groups is defined
 
-    - role: infra.controller_configuration.workflow_job_templates
-      when: controller_workflows is defined or controller_workflow_job_templates is defined
+  #   - role: infra.controller_configuration.job_templates
+  #     when: controller_templates is defined or controller_job_templates is defined
 
-    - role: infra.controller_configuration.notification_templates
-      when: controller_notifications is defined or controller_notification_templates is defined
+  #   - role: infra.controller_configuration.workflow_job_templates
+  #     when: controller_workflows is defined or controller_workflow_job_templates is defined
 
-    - role: infra.controller_configuration.schedules
-      when: controller_schedules is defined
+  #   - role: infra.controller_configuration.notification_templates
+  #     when: controller_notifications is defined or controller_notification_templates is defined
+
+  #   - role: infra.controller_configuration.schedules
+  #     when: controller_schedules is defined
