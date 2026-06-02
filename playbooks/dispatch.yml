@@ -102,11 +102,11 @@
     - role: infra.controller_configuration.credentials
       when: controller_credentials is defined
 
-  #   - role: infra.controller_configuration.projects
-  #     when: controller_projects is defined
+    - role: infra.controller_configuration.projects
+      when: controller_projects is defined
 
-  #   - role: infra.controller_configuration.inventories
-  #     when: controller_inventories is defined
+    - role: infra.controller_configuration.inventories
+      when: controller_inventories is defined
 
   #   - role: infra.controller_configuration.inventory_sources
   #     when: controller_inventory_sources is defined

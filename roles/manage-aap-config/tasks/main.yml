@@ -33,20 +33,20 @@
     # state: "{{ item.state }}"
   loop: "{{ controller_credentials }}"
 
-- name: Create Projects
-  ansible.controller.project:
-    name: "{{ item.name }}"
-    description: "{{ item.description }}"
-    organization: "{{ item.organization }}"
-    scm_branch: "{{ item.scm_branch }}"
-    scm_clean: "{{ item.scm_clean }}"
-    scm_delete_on_update: "{{ item.scm_delete_on_update }}"
-    scm_type: "{{ item.scm_type }}"
-    scm_update_on_launch: "{{ item.scm_update_on_launch }}"
-    scm_url: "{{ item.scm_url }}"
-    validate_certs: "{{ gateway_validate_certs }}"
-    # state: "{{ item.state }}"
-  loop: "{{ controller_projects }}"
+# - name: Create Projects
+#   ansible.controller.project:
+#     name: "{{ item.name }}"
+#     description: "{{ item.description }}"
+#     organization: "{{ item.organization }}"
+#     scm_branch: "{{ item.scm_branch }}"
+#     scm_clean: "{{ item.scm_clean }}"
+#     scm_delete_on_update: "{{ item.scm_delete_on_update }}"
+#     scm_type: "{{ item.scm_type }}"
+#     scm_update_on_launch: "{{ item.scm_update_on_launch }}"
+#     scm_url: "{{ item.scm_url }}"
+#     validate_certs: "{{ gateway_validate_certs }}"
+#     # state: "{{ item.state }}"
+#   loop: "{{ controller_projects }}"
 
 # - name: Creating Job Templates
 #   ansible.controller.job_template:
