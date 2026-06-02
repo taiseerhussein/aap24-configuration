@@ -91,18 +91,29 @@
               ])
             | list
           }}    
-    - name: Remove system/default instance groups 
+    - name: Remove default instance group
       ansible.builtin.set_fact:
         controller_instance_groups: >-
           {{
             controller_instance_groups | default([])
-            | rejectattr('name', 'in', [
-                'controlplane',
-                'default'
-                'executionplane'
-              ])
+            | rejectattr('name', 'equalto', 'default')
             | list
-          }}  
+          }}
+
+    - name: Remove installer-managed policy fields from instance groups
+      ansible.builtin.set_fact:
+        controller_instance_groups: >-
+          {{
+            controller_instance_groups | default([])
+            | map('dict2items')
+            | map('rejectattr', 'key', 'in', [
+                'policy_instance_percentage',
+                'policy_instance_minimum',
+                'policy_instance_list'
+              ])
+            | map('items2dict')
+            | list
+          }}
     # - name: Show loaded variable counts
     #   ansible.builtin.debug:
     #     msg:
