@@ -4,7 +4,7 @@
   connection: local
   gather_facts: false
   vars:
-    personal_access_token: "{{ git_hub_token }}"
+    personal_access_token: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
     software_repository: https://{{ personal_access_token }}@github.com/taiseerhussein/aap24-configuration.git
     local_repo: /var/tmp/github/aap24_conversion
     git_name: taiseerhussein
@@ -64,39 +64,105 @@
         force: true
         version: main
 
-    # - name: Read the cloned file tree into Ansible variables
-    #   ansible.builtin.include_role:
-    #     name: infra.controller_configuration.filetree_read
-    #   vars:
-    #     filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
+    - name: Load normalized variable files
+      ansible.builtin.include_vars:
+        dir: "{{ aap24_configs }}"
+        extensions:
+          - yml
+          - yaml
+        ignore_unknown_extensions: true
 
-    # - name: Map flat files to dispatch variables
-    #   ansible.builtin.set_fact:
-    #     controller_organizations: "{{ lookup('ansible.builtin.file', input_path + '/organizations.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_credential_types: "{{ lookup('ansible.builtin.file', input_path + '/credential_types.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_credentials: "{{ lookup('ansible.builtin.file', input_path + '/credentials.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_execution_environments: "{{ lookup('ansible.builtin.file', input_path + '/execution_environments.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     # controller_instance_groups: "{{ lookup('ansible.builtin.file', input_path + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_projects: "{{ lookup('ansible.builtin.file', input_path + '/projects.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_inventories: "{{ lookup('ansible.builtin.file', input_path + '/inventories.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_hosts: "{{ lookup('ansible.builtin.file', input_path + '/hosts.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_teams: "{{ lookup('ansible.builtin.file', input_path + '/teams.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_users: "{{ lookup('ansible.builtin.file', input_path + '/users.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_roles: "{{ lookup('ansible.builtin.file', input_path + '/roles.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_templates: "{{ lookup('ansible.builtin.file', input_path + '/job_templates.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #     controller_schedules: "{{ lookup('ansible.builtin.file', input_path + '/schedules.yaml', errors='ignore') | default([], true) | from_yaml }}"
-    #    # controller_settings: "{{ lookup('ansible.builtin.file', input_path + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
-        
+    - name: Show loaded variable counts
+      ansible.builtin.debug:
+        msg:
+          organizations: "{{ controller_organizations | default([]) | length }}"
+          users: "{{ controller_users | default([]) | length }}"
+          teams: "{{ controller_teams | default([]) | length }}"
+          credentials: "{{ controller_credentials | default([]) | length }}"
+          projects: "{{ controller_projects | default([]) | length }}"
+          inventories: "{{ controller_inventories | default([]) | length }}"
+          job_templates: "{{ controller_templates | default(controller_job_templates | default([])) | length }}"
+    - name: Create gateway organizations
+      ansible.platform.organization:
+        name: "{{ item.name }}"
+        description: "{{ item.description | default(omit) }}"
+        state: present
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ aap_password }}"
+        aap_validate_certs: "{{ aap_validate_certs }}"
+      loop: "{{ gateway_organizations | default([]) }}"
 
-    - name: Map job templates to the naming convention expected by dispatch
-      ansible.builtin.set_fact:
-        controller_templates: "{{ controller_job_templates | default([], true) }}"
-        # Set infrastructure variables to safe empty lists so dispatch skips them cleanly
-        controller_instance_groups: []
-        controller_settings: []
-        
-    - name: Dispatch the configurations into AAP 2.6
-      ansible.builtin.include_role:
-        name: infra.controller_configuration.dispatch
+    - name: Create gateway users
+      ansible.platform.user:
+        username: "{{ item.username }}"
+        first_name: "{{ item.first_name | default(omit) }}"
+        last_name: "{{ item.last_name | default(omit) }}"
+        email: "{{ item.email | default(omit) }}"
+        is_superuser: "{{ item.is_superuser | default(false) }}"
+        password: "{{ item.password | default(omit) }}"
+        state: present
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ aap_password }}"
+        aap_validate_certs: "{{ aap_validate_certs }}"
+      loop: "{{ gateway_users | default([]) }}"
 
-    
+    - name: Create gateway teams
+      ansible.platform.team:
+        name: "{{ item.name }}"
+        organization: "{{ item.organization }}"
+        description: "{{ item.description | default(omit) }}"
+        state: present
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ aap_password }}"
+        aap_validate_certs: "{{ aap_validate_certs }}"
+      loop: "{{ gateway_teams | default([]) }}"
+
+    - name: Apply gateway role assignments
+      ansible.platform.role_user_assignment:
+        user: "{{ item.user }}"
+        role_definition: "{{ item.role_definition }}"
+        object_id: "{{ item.object_id | default(omit) }}"
+        content_type: "{{ item.content_type | default(omit) }}"
+        state: present
+        aap_hostname: "{{ aap_hostname }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ aap_password }}"
+        aap_validate_certs: "{{ aap_validate_certs }}"
+      loop: "{{ gateway_role_assignments | default([]) }}"
+
+  roles:
+    - role: infra.controller_configuration.credential_types
+      when: controller_credential_types is defined
+
+    - role: infra.controller_configuration.credentials
+      when: controller_credentials is defined
+
+    - role: infra.controller_configuration.projects
+      when: controller_projects is defined
+
+    - role: infra.controller_configuration.inventories
+      when: controller_inventories is defined
+
+    - role: infra.controller_configuration.inventory_sources
+      when: controller_inventory_sources is defined
+
+    - role: infra.controller_configuration.hosts
+      when: controller_hosts is defined
+
+    - role: infra.controller_configuration.groups
+      when: controller_groups is defined
+
+    - role: infra.controller_configuration.job_templates
+      when: controller_templates is defined or controller_job_templates is defined
+
+    - role: infra.controller_configuration.workflow_job_templates
+      when: controller_workflows is defined or controller_workflow_job_templates is defined
+
+    - role: infra.controller_configuration.notification_templates
+      when: controller_notifications is defined or controller_notification_templates is defined
+
+    - role: infra.controller_configuration.schedules
+      when: controller_schedules is defined

@@ -1,0 +1,102 @@
+---
+- name: "Playbook to upgrade CaC from AAP <= 2.4 to AAP >= 2.5 format"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    personal_access_token: "{{ lookup('ansible.builtin.env', 'GITHUB_TOKEN') }}"
+    software_repository: https://{{ personal_access_token }}@github.com/taiseerhussein/aap24-configuration.git
+    local_repo: /var/tmp/github/aap24_conversion
+    git_name: taiseerhussein
+    git_email: tkhussein@yahoo.com
+
+    flatten: true
+    filetree_read_organizations: false
+    input_path: "{{ local_repo }}/{{ aap24_configs }}"
+
+  tasks:
+
+    - name: Determine that both AAP and Machine credentials are set
+      ansible.builtin.assert:
+        that:
+          - "lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') !=''"
+          - "lookup('ansible.builtin.env', 'CONTROLLER_HOST') !=''"
+          - "lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') !=''"
+        fail_msg:
+          - "Red Hat Ansible Automation Platform credential is not set"
+          - "Please assign correct credentials to the Job Template"
+
+    - name: Create a new token
+      ansible.controller.token:
+        controller_host: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+        controller_username: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+        controller_password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+        validate_certs: false
+        description: Controller export
+        scope: write
+        state: present
+
+    - name: Printout my token
+      ansible.builtin.debug:
+        msg:
+          - "{{ ansible_facts['controller_token']['token'] }}"
+
+    - name: "Set the oauth token to be used since now"
+      ansible.builtin.set_fact:
+        controller_oauthtoken: "{{ ansible_facts['controller_token']['token'] }}"
+
+    - name: Set controller_validate_certs
+      ansible.builtin.set_fact:
+        controller_validate_certs: false
+
+    - name: Set controller_hostname
+      ansible.builtin.set_fact:
+        controller_hostname: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+
+    - name: Clone the software repository
+      register: clone_result
+      run_once: true
+      when: software_repository is defined
+      ansible.builtin.git:
+        repo: "{{ software_repository }}"
+        dest: "{{ local_repo }}"
+        accept_hostkey: true
+        force: true
+        version: main
+
+    # - name: Read the cloned file tree into Ansible variables
+    #   ansible.builtin.include_role:
+    #     name: infra.controller_configuration.filetree_read
+    #   vars:
+    #     filetree_controller_patch: "{{ local_repo }}/{{ aap24_configs }}"
+
+    # - name: Map flat files to dispatch variables
+    #   ansible.builtin.set_fact:
+    #     controller_organizations: "{{ lookup('ansible.builtin.file', input_path + '/organizations.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_credential_types: "{{ lookup('ansible.builtin.file', input_path + '/credential_types.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_credentials: "{{ lookup('ansible.builtin.file', input_path + '/credentials.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_execution_environments: "{{ lookup('ansible.builtin.file', input_path + '/execution_environments.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     # controller_instance_groups: "{{ lookup('ansible.builtin.file', input_path + '/instance_groups.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_projects: "{{ lookup('ansible.builtin.file', input_path + '/projects.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_inventories: "{{ lookup('ansible.builtin.file', input_path + '/inventories.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_hosts: "{{ lookup('ansible.builtin.file', input_path + '/hosts.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_teams: "{{ lookup('ansible.builtin.file', input_path + '/teams.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_users: "{{ lookup('ansible.builtin.file', input_path + '/users.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_roles: "{{ lookup('ansible.builtin.file', input_path + '/roles.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_templates: "{{ lookup('ansible.builtin.file', input_path + '/job_templates.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #     controller_schedules: "{{ lookup('ansible.builtin.file', input_path + '/schedules.yaml', errors='ignore') | default([], true) | from_yaml }}"
+    #    # controller_settings: "{{ lookup('ansible.builtin.file', input_path + '/settings.yaml', errors='ignore') | default([], true) | from_yaml }}"
+        
+
+    - name: Map job templates to the naming convention expected by dispatch
+      ansible.builtin.set_fact:
+        controller_templates: "{{ controller_job_templates | default([], true) }}"
+        # Set infrastructure variables to safe empty lists so dispatch skips them cleanly
+        controller_instance_groups: []
+        controller_settings: []
+
+    - name: Dispatch the configurations into AAP 2.6
+      ansible.builtin.include_role:
+        name: infra.controller_configuration.dispatch
+
+    
