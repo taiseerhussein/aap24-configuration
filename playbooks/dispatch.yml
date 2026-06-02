@@ -93,7 +93,7 @@
           }}    
     - name: Remove system/default instance groups 
       ansible.builtin.set_fact:
-        controller_execution_environments: >-
+        controller_instance_groups: >-
           {{
             controller_instance_groups | default([])
             | rejectattr('name', 'in', [
