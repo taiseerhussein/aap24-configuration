@@ -132,7 +132,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "aap24-hosts"
+          default:  "aap24-hosts"
           required: True
           variable: config_dir
           new_question: False
@@ -188,7 +188,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "aap24-hosts_33_configs"
+          default:  "aap24-hosts_33_configs"
           required: True
           variable: aap24_configs
           new_question: False
@@ -196,7 +196,7 @@ controller_templates:
         - max: 1024
           min: 0
           type: text
-          default: !unsafe "aap25-hosts"
+          default:  "aap25-hosts"
           required: True
           variable: aap25_configs
           new_question: False
