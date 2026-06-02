@@ -108,23 +108,23 @@
     - role: infra.controller_configuration.inventories
       when: controller_inventories is defined
 
-  #   - role: infra.controller_configuration.inventory_sources
-  #     when: controller_inventory_sources is defined
+    - role: infra.controller_configuration.inventory_sources
+      when: controller_inventory_sources is defined
 
-  #   - role: infra.controller_configuration.hosts
-  #     when: controller_hosts is defined
+    - role: infra.controller_configuration.hosts
+      when: controller_hosts is defined
 
-  #   - role: infra.controller_configuration.groups
-  #     when: controller_groups is defined
+    - role: infra.controller_configuration.groups
+      when: controller_groups is defined
 
-  #   - role: infra.controller_configuration.job_templates
-  #     when: controller_templates is defined or controller_job_templates is defined
+    - role: infra.controller_configuration.job_templates
+      when: controller_templates is defined or controller_job_templates is defined
 
-  #   - role: infra.controller_configuration.workflow_job_templates
-  #     when: controller_workflows is defined or controller_workflow_job_templates is defined
+    - role: infra.controller_configuration.workflow_job_templates
+      when: controller_workflows is defined or controller_workflow_job_templates is defined
 
-  #   - role: infra.controller_configuration.notification_templates
-  #     when: controller_notifications is defined or controller_notification_templates is defined
+    - role: infra.controller_configuration.notification_templates
+      when: controller_notifications is defined or controller_notification_templates is defined
 
-  #   - role: infra.controller_configuration.schedules
-  #     when: controller_schedules is defined
+    - role: infra.controller_configuration.schedules
+      when: controller_schedules is defined
