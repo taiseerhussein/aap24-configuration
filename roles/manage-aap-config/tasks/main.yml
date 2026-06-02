@@ -22,42 +22,37 @@
     # state: "{{ item.state }}"
   loop: "{{ controller_teams }}"
 
-- name: Create empty credentials
-  ansible.controller.credential:
-    name: "{{ item.name }}"
-    description: "{{ item.description }}"
-    organization: "{{ item.organization }}"
-    credential_type: "{{ item.credential_type }}"
-    inputs: "{{ item.inputs }}"
-    validate_certs: "{{ gateway_validate_certs }}"
-    # state: "{{ item.state }}"
-  loop: "{{ controller_credentials }}"
+- name: Create a user
+  ansible.platform.user:
+    username: "{{ item.username }}"
+    first_name: "{{ item.first_name }}"
+    last_name: "{{ item.last_name }}"
+    email: "{{ item.email }}"
+    auditor: "{{ item.auditor }}"
+    superuser: "{{ item.superuser }}"
+    update_secrets: "{{ item.update_secrets }}"
+    password: "CHANGE-ME"
+    gateway_hostname: "{{ gateway_hostname }}"
+    gateway_username: "{{ gateway_username }}"
+    gateway_password: "{{ gateway_password }}"
+    gateway_validate_certs: "{{ gateway_validate_certs }}"
+    # state: present
+# - name: Add users to organizations
+#   ansible.platform.role_user_assignment:
+#     gateway_hostname: "{{ gateway_hostname }}"
+#     gateway_username: "{{ gateway_username }}"
+#     gateway_password: "{{ gateway_password }}"
+#     gateway_validate_certs: "{{ gateway_validate_certs }}"
+#     user: "{{ item.user }}"
+#     role_definition: "{{ item.role }}"
+#     object_name: "{{ item.user }}"
+#   loop: "{{ controller_roles | subelements('organizations', skip_missing=True) }}"
+  
 
-# - name: Create Projects
-#   ansible.controller.project:
-#     name: "{{ item.name }}"
-#     description: "{{ item.description }}"
-#     organization: "{{ item.organization }}"
-#     scm_branch: "{{ item.scm_branch }}"
-#     scm_clean: "{{ item.scm_clean }}"
-#     scm_delete_on_update: "{{ item.scm_delete_on_update }}"
-#     scm_type: "{{ item.scm_type }}"
-#     scm_update_on_launch: "{{ item.scm_update_on_launch }}"
-#     scm_url: "{{ item.scm_url }}"
-#     validate_certs: "{{ gateway_validate_certs }}"
-#     # state: "{{ item.state }}"
-#   loop: "{{ controller_projects }}"
 
-# - name: Creating Job Templates
-#   ansible.controller.job_template:
-#     name: "{{ item.name }}"
-#     organization: "{{ item.organization }}"
-#     job_type: "{{ item.job_type }}"
-#     inventory: "{{ item.inventory }}"
-#     project: "{{ item.project }}"
-#     execution_environment: "{{ item.execution_environment }}"
-#     playbook: "{{ item.playbook }}"
-#     credentials: "{{ item.credentials }}"
-#     validate_certs: "{{ gateway_validate_certs }}"
-#     state: "{{ item.state }}"
-#   loop: "{{ controller_templates }}"
+# - name: Template
+#   ansible.platform.test
+#   gateway_hostname: "{{ gateway_hostname }}"
+#   gateway_username: "{{ gateway_username }}"
+#   gateway_password: "{{ gateway_password }}"
+#   gateway_validate_certs: "{{ gateway_validate_certs }}"    

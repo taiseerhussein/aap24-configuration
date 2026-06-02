@@ -85,54 +85,11 @@
           projects: "{{ controller_projects | default([]) | length }}"
           inventories: "{{ controller_inventories | default([]) | length }}"
           job_templates: "{{ controller_templates | default(controller_job_templates | default([])) | length }}"
-    - name: Show credentials before import
-      ansible.builtin.debug:
-        msg:
-          name: "{{ item.name }}"
-          org: "{{ item.organization | default('NO ORG') }}"
-          type: "{{ item.credential_type | default('NO TYPE') }}"
-          input_keys: "{{ item.inputs.keys() | list if item.inputs is defined else [] }}"
-      loop: "{{ controller_credentials | default([]) }}"  
+   
   roles:
-    - ../../roles/manage-aap-config
 
-    # - role: infra.controller_configuration.credential_types
-    #   when: controller_credential_types is defined
+    - role: infra.controller_configuration.credential_types
+      when: controller_credential_types is defined
 
-    # - role: infra.controller_configuration.credentials
-    #   when: controller_credentials is defined
-    - role: controller_configuration.execution_environments
-      when: controller_execution_environments is defined
-
-    - role: infra.controller_configuration.projects
-      when: controller_projects is defined
-
-    - role: infra.controller_configuration.inventories
-      when: controller_inventories is defined
-
-    - role: infra.controller_configuration.inventory_sources
-      when: controller_inventory_sources is defined
-
-    - role: infra.controller_configuration.hosts
-      when: controller_hosts is defined
-
-    - role: infra.controller_configuration.groups
-      when: controller_groups is defined
-
-    - role: infra.controller_configuration.job_templates
-      when: controller_templates is defined or controller_job_templates is defined
-
-    - role: infra.controller_configuration.workflow_job_templates
-      when: controller_workflows is defined or controller_workflow_job_templates is defined
-
-    - role: infra.controller_configuration.notification_templates
-      when: controller_notifications is defined or controller_notification_templates is defined
-
-    - role: infra.controller_configuration.schedules
-      when: controller_schedules is defined
-
-    - role: controller_configuration.instance_groups
-      when: controller_instance_groups is defined
-
-    - role: infra.controller_configuration.roles
-      when: controller_roles is defined
+    - role: infra.controller_configuration.credentials
+      when: controller_credentials is defined
