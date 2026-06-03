@@ -53,3 +53,9 @@
       - yml
       - yaml
     ignore_unknown_extensions: true
+- name: Normalize credential secret values
+  ansible.builtin.replace:
+    path: "{{ input_path }}/credentials.yml"
+    regexp: '(^\s*(password|token|client_secret|ssh_key_data|secret|vault_password):\s*).*$'
+    replace: '\1"CHANGE_ME"'
+  when: lookup('ansible.builtin.fileglob', input_path ~ '/credentials.yml', errors='ignore') | length > 0
