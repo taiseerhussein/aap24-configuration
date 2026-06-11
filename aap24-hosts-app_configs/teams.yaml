@@ -10,15 +10,3 @@ controller_teams:
     description: ""
     organization: "SAML-Lab"
 ...
----
-controller_teams:
-  - name: "org1-admins"
-    description: ""
-    organization: "Org1"
-  - name: "prod-admins"
-    description: ""
-    organization: "prod"
-  - name: "saml-test-users"
-    description: ""
-    organization: "SAML-Lab"
-...
