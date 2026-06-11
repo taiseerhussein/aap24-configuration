@@ -11,3 +11,16 @@ controller_organizations:
   - name: "Org1"
     description: ""
 ...
+---
+controller_organizations:
+  - name: "Default"
+    description: ""
+  - name: "dev"
+    description: ""
+  - name: "prod"
+    description: ""
+  - name: "SAML-Lab"
+    description: ""
+  - name: "Org1"
+    description: ""
+...
