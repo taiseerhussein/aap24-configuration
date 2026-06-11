@@ -153,3 +153,5 @@
 
     - role: infra.controller_configuration.roles
       when: controller_roles is defined
+    - role: infra.controller_configuration.applications
+      when: controller_applications is defined
