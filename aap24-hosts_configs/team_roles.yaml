@@ -1,5 +1,10 @@
 ---
 controller_roles:
+  - team: "org1-admins"
+    organizations:
+      - "dev"
+      - "Org1"
+    role: "execute"
   - team: "prod-admins"
     organizations:
       - "prod"
